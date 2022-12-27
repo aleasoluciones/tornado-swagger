@@ -148,6 +148,14 @@ def test__format_handler_path():
     )
     assert route_path == "/api/{posts_id}/{post_id2}/{post_id3}"
 
+def test__format_handler_path_with_regex():
+    class HandlerWithMultipleParameterAndRegex(tornado.web.RequestHandler):
+        def get(self, **kwargs):
+            pass
+    url = tornado.web.url(r'/api/(?P<posts_id>)/(?P<post_id>)', HandlerWithMultipleParameterAndRegex)
+    route_path = format_handler_path(HandlerWithMultipleParameterAndRegex, url.regex.pattern, url.regex.groups)
+    assert route_path == '/api/{posts_id}/{post_id}'    
+    
 
 def test_try_extract_args():
     def method_handler(self, arg_name):
